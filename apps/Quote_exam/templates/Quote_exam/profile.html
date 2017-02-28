@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Profile</title>
+</head>
+<body>
+  <h1>Welcome, {{ request.session.first_name }}</h1>
+  <!-- ******************CREATE A QUOTE************************** -->
+  <form action="{% url 'quote_addon' %}" method="post">
+    {% csrf_token %}
+    Quote:<textarea name="quotes" rows="8" cols="80"></textarea>
+    <input type="submit" name="submit" value="Add">
+  </form>
+  {% if messages %}
+      {% for message in messages %}
+        <div class="flashmessages">
+          {{message}}
+        </div>
+      {% endfor %}
+    {% endif %}
+<!-- **************************SEE OTHER QUOTES**************************** -->
+
+    <!-- {% for quote in quotes %}
+    Quotes: {{quote.quotes}}
+    <form action="{% url 'favorite_quote' quote.id %}" method ='post'>
+      {% csrf_token %}
+      <input type="submit" name="addfavs" value="Add to my favorites">
+    </form>
+  {% endfor %} -->
+  <h3>Quotes</h3>
+    {% for quote in Quote.quotes.all %}
+    <p> Quote: {{Quote.quotes}}</p>
+    <form action="{% url 'favorites' quotes.id %}" method="post">
+      {% csrf_token %}
+    <input type="submit" name="addlist" value="Add to My List">
+    </form>
+    {% endfor %}
+
+  <!-- ***********************YOUR FAVORITES*************************** -->
+    <h3>Favorites</h3>
+    {% for favorite in favorites %}
+    Quote:{{fav.quotefavorite}}
+    <form action="{% url 'delete' favorite.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" name="delete" value="Remove from from my favorites">
+    </form>
+    {% endfor %}
+
+    <a href="/clear">Logout</a>
+
+  </body>
+  </html>
